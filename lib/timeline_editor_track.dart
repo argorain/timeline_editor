@@ -104,7 +104,7 @@ class TimelineEditorCard extends ITimelineEditorCard {
                     child: Container(
                       color: Colors.white,
                       child: Icon(
-                        Icons.swap_horiz,
+                        Icons.drag_indicator,
                         color: Colors.black,
                       ),
                     ),
