@@ -332,23 +332,23 @@ class _TimelineEditorState extends State<TimelineEditor> {
                                         context);
                                   }),
                             ),
-                            Container(
-                              height: widget.timeHeight,
-                              child: ListView.builder(
-                                  key: Key('timelineeditor-times2'),
-                                  controller: scrollController2,
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: totalTimeSlots,
-                                  itemBuilder: (context, index) {
-                                    return buildTextTime(
-                                        index,
-                                        scaledPixelPerSeconds,
-                                        index <= totalFullTimeSlots - 1
-                                            ? timeBlockSize
-                                            : lastTimeBlockSize,
-                                        context);
-                                  }),
-                            ),
+                            // Container(
+                            //   height: widget.timeHeight,
+                            //   child: ListView.builder(
+                            //       key: ValueKey('timelineeditor-times2'),
+                            //       controller: scrollController2,
+                            //       scrollDirection: Axis.horizontal,
+                            //       itemCount: totalTimeSlots,
+                            //       itemBuilder: (context, index) {
+                            //         return buildTextTime(
+                            //             index,
+                            //             scaledPixelPerSeconds,
+                            //             index <= totalFullTimeSlots - 1
+                            //                 ? timeBlockSize
+                            //                 : lastTimeBlockSize,
+                            //             context);
+                            //       }),
+                            // ),
                             ...List.generate(
                                 widget.countTracks,
                                 (index) => widget.trackBuilder(
