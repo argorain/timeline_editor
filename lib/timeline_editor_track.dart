@@ -37,6 +37,10 @@ class TimelineEditorCard extends ITimelineEditorCard {
   /// possibility of moving this box
   final void Function(Duration duration) onMovedStart;
 
+  /// optional callback that will activate the
+  /// possibility of moving this box
+  final void Function(Duration duration) onMovedBox;
+
   /// optional icon for [onMovedStart]
   final Icon onMovedStartIcon;
 
@@ -45,6 +49,9 @@ class TimelineEditorCard extends ITimelineEditorCard {
 
   /// optional icon for [menuEntries]
   final Icon menuEntriesIcon;
+
+  /// optional icon for [onMovedBox]
+  final Icon onMovedBoxIcon;
 
   const TimelineEditorCard(Duration start,
       {Key key,
@@ -59,9 +66,11 @@ class TimelineEditorCard extends ITimelineEditorCard {
       this.onSelectedMenuItem,
       this.onMovedDuration,
       this.onMovedStart,
+      this.onMovedBox,
       this.onMovedStartIcon,
       this.onMovedDurationIcon,
-      this.menuEntriesIcon})
+      this.menuEntriesIcon,
+      this.onMovedBoxIcon})
       : super(key: key, start: start, duration: duration);
 
   @override
@@ -125,6 +134,27 @@ class TimelineEditorCard extends ITimelineEditorCard {
                       ? onMovedStartIcon 
                       : Icon(
                         Icons.swap_horiz,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            if (onMovedBox != null && selected)
+              GestureDetector(
+                onHorizontalDragUpdate: (d) => onMovedBox(
+                    durationFromSeconds(d.delta.dx / pixelsPerSeconds)),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: SizedBox(
+                    height: 30,
+                    width: 30,
+                    child: Container(
+                      color: borderColor != null ? borderColor : Colors.white,
+                      child: onMovedBoxIcon != null 
+                      ? onMovedBoxIcon 
+                      : Icon(
+                        Icons.drag_indicator,
                         color: Colors.black,
                       ),
                     ),
