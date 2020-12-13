@@ -53,6 +53,8 @@ class TimelineEditorCard extends ITimelineEditorCard {
   /// optional icon for [onMovedBox]
   final Icon onMovedBoxIcon;
 
+  final void Function(DraggableDetails details, double pixelsPerSeconds) onDragEnd;
+
   const TimelineEditorCard(Duration start,
       {Key key,
       Duration duration,
@@ -70,14 +72,15 @@ class TimelineEditorCard extends ITimelineEditorCard {
       this.onMovedStartIcon,
       this.onMovedDurationIcon,
       this.menuEntriesIcon,
-      this.onMovedBoxIcon})
+      this.onMovedBoxIcon,
+      this.onDragEnd})
       : super(key: key, start: start, duration: duration);
 
   @override
   Widget build(
     BuildContext context,
     double pixelsPerSeconds, {
-    Duration availableSpace,
+    Duration availableSpace
   }) {
     return TimelineEditorSizedBox(
       duration: duration ?? (start - availableSpace),
@@ -141,9 +144,19 @@ class TimelineEditorCard extends ITimelineEditorCard {
                 ),
               ),
             if (onMovedBox != null && selected)
-              GestureDetector(
-                onHorizontalDragUpdate: (d) => onMovedBox(
-                    durationFromSeconds(d.delta.dx / pixelsPerSeconds)),
+              Draggable(
+                data: 5,
+                axis: Axis.horizontal,
+                onDragEnd: (details) {
+                  onDragEnd(details, pixelsPerSeconds);
+                },
+                dragAnchor: DragAnchor.child,
+                feedback: Container(
+                    width: (durationToSeconds(duration) * pixelsPerSeconds).abs(),
+                    height: 100,
+                    child: child,
+                    color: color,
+                  ),
                 child: Align(
                   alignment: Alignment.center,
                   child: SizedBox(
@@ -200,10 +213,25 @@ class TimelineEditorEmptyCard extends ITimelineEditorCard {
     double pixelsPerSeconds, {
     Duration availableSpace,
   }) {
+    bool accepted = false;
+
     return TimelineEditorSizedBox(
       duration: duration,
       pixelsPerSeconds: pixelsPerSeconds,
-      child: Container(),
+      child: DragTarget(
+        builder: (context, List<int> candidateData, rejectedData) {
+          print(candidateData);
+          return accepted ? Container(color: Colors.green,) : Container(color: Colors.amber,);
+        }, 
+        onWillAccept: (data) {
+          print("Will Accept");
+          return true;
+        }, 
+        onAccept: (data) {
+          print("On Accept");
+          accepted = true;
+        },
+      ),
     );
   }
 }
@@ -242,7 +270,7 @@ class TimelineEditorSizedBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var width = durationToSeconds(duration) * pixelsPerSeconds;
-    return SizedBox(
+    return Container(
       width: width > 0 ? width : 0,
       height: height ?? 100,
       child: child,
@@ -327,6 +355,12 @@ class _TimelineEditorTrackState extends State<TimelineEditorTrack> {
           ),
         );
       }
+    } else {
+      var blankFirstBox = TimelineEditorEmptyCard(
+        Duration.zero,
+        widget.duration,
+      );
+      targetBoxes.add(blankFirstBox);
     }
 
     boxes = targetBoxes;
@@ -363,7 +397,7 @@ class _TimelineEditorTrackState extends State<TimelineEditorTrack> {
             return b.build(context, widget.pixelsPerSeconds,
                 availableSpace: availableSpace);
             // return GestureDetector(
-            //   onTap:
+            //   onTap: 
             //       b.onTap == null ? null : () => b.onTap(b.start, b.duration),
             //   onHorizontalDragStart:
             //       b.onMoved == null ? null : (_) => globalMoveSinceLastSend = 0,
