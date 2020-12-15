@@ -146,7 +146,7 @@ class TimelineEditorCard extends ITimelineEditorCard {
             if (onMovedBox != null && selected)
               Draggable(
                 data: 5,
-                axis: Axis.horizontal,
+                //axis: Axis.horizontal,
                 onDragEnd: (details) {
                   onDragEnd(details, pixelsPerSeconds);
                 },
@@ -205,7 +205,10 @@ class TimelineEditorCard extends ITimelineEditorCard {
 }
 
 class TimelineEditorEmptyCard extends ITimelineEditorCard {
-  const TimelineEditorEmptyCard(Duration start, Duration duration, {Key key})
+  final int trackId;
+  final void Function(Offset offset, int trackId) onDragEnd;
+
+  const TimelineEditorEmptyCard(Duration start, Duration duration, this.trackId, this.onDragEnd, {Key key})
       : super(key: key, start: start, duration: duration);
 
   Widget build(
@@ -214,6 +217,7 @@ class TimelineEditorEmptyCard extends ITimelineEditorCard {
     Duration availableSpace,
   }) {
     bool accepted = false;
+
 
     return TimelineEditorSizedBox(
       duration: duration,
@@ -230,6 +234,10 @@ class TimelineEditorEmptyCard extends ITimelineEditorCard {
         onAccept: (data) {
           print("On Accept");
           accepted = true;
+        },
+        onAcceptWithDetails: (details) {
+          print("["+trackId.toString()+"]On Accept with details:" + details.toString());
+          onDragEnd(details.offset, trackId);
         },
       ),
     );
@@ -291,6 +299,10 @@ class TimelineEditorTrack extends StatefulWidget {
 
   final Color defaultColor;
 
+  final int trackId;
+
+  final void Function(Offset offset, int trackId) onDragEnd;
+
   const TimelineEditorTrack(
       {Key key,
       @required this.scrollControllers,
@@ -298,7 +310,9 @@ class TimelineEditorTrack extends StatefulWidget {
       @required this.pixelsPerSeconds,
       @required this.duration,
       this.trackHeight = 100,
-      this.defaultColor})
+      this.defaultColor,
+      this.trackId,
+      this.onDragEnd})
       : super(key: key);
 
   @override
@@ -339,6 +353,8 @@ class _TimelineEditorTrackState extends State<TimelineEditorTrack> {
       var blankFirstBox = TimelineEditorEmptyCard(
         Duration.zero,
         sortedStart[0].start,
+        widget.trackId,
+        widget.onDragEnd
       );
       targetBoxes.add(blankFirstBox);
       var i = 0;
@@ -352,6 +368,8 @@ class _TimelineEditorTrackState extends State<TimelineEditorTrack> {
           TimelineEditorEmptyCard(
             end,
             nextBoxTime - end,
+            widget.trackId,
+            widget.onDragEnd
           ),
         );
       }
@@ -359,6 +377,8 @@ class _TimelineEditorTrackState extends State<TimelineEditorTrack> {
       var blankFirstBox = TimelineEditorEmptyCard(
         Duration.zero,
         widget.duration,
+        widget.trackId,
+        widget.onDragEnd
       );
       targetBoxes.add(blankFirstBox);
     }
