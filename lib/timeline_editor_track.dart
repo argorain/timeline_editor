@@ -151,11 +151,32 @@ class TimelineEditorCard extends ITimelineEditorCard {
                   onDragEnd(details, pixelsPerSeconds);
                 },
                 dragAnchor: DragAnchor.child,
-                feedback: Container(
+                feedbackOffset: Offset(0, -50),
+                feedback: /*Align(alignment: Alignment.topLeft, child: Container(
                     width: (durationToSeconds(duration) * pixelsPerSeconds).abs(),
                     height: 100,
                     child: child,
                     color: color,
+                  )),*/
+                  Transform.scale(
+                    scale: 2.0,
+                    child: Opacity(
+                      opacity: 0.5,
+                      child: Container(
+                        padding: EdgeInsets.only(bottom: 50),
+                        child: Material(
+                            color: Colors.transparent,
+                            child: Transform.scale(
+                              scale: 0.5,
+                              child: Container(
+                                width: (durationToSeconds(duration) * pixelsPerSeconds).abs(),
+                                height: 100,
+                                child: child,
+                                color: color,
+                              ),
+                            )),
+                      ),
+                    ),
                   ),
                 child: Align(
                   alignment: Alignment.center,
