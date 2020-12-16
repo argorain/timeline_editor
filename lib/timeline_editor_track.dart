@@ -225,7 +225,11 @@ class TimelineEditorEmptyCard extends ITimelineEditorCard {
       child: DragTarget(
         builder: (context, List<int> candidateData, rejectedData) {
           print(candidateData);
-          return accepted ? Container(color: Colors.green,) : Container(color: Colors.amber,);
+          return Container(
+            decoration: BoxDecoration(
+              border: Border.symmetric(horizontal: BorderSide(color: Colors.white30, width: 1)),
+            ),
+          );
         }, 
         onWillAccept: (data) {
           print("Will Accept");
