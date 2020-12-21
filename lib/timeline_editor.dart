@@ -297,7 +297,7 @@ class _TimelineEditorState extends State<TimelineEditor> {
                         // mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           SizedBox(
-                            height: widget.timeHeight * 2,
+                            height: widget.timeHeight,
                             child: widget.timelineLeadingWidget,
                           ),
                           ...List<Widget>.generate(
