@@ -248,7 +248,7 @@ class TimelineEditorEmptyCard extends ITimelineEditorCard {
           print(candidateData);
           return Container(
             decoration: BoxDecoration(
-              border: Border.symmetric(horizontal: BorderSide(color: Colors.white30, width: 1)),
+              border: Border.symmetric(horizontal: BorderSide(color: Theme.of(context).dividerColor, width: 1)),
             ),
           );
         }, 
