@@ -27,10 +27,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
 
   double scale;
 
-  double _trackHeight = 100;
-
   AnimationController _controller;
-  Animation<double> _animation;
 
   void moveBox1(Duration newStart) {
     if (box1Start + newStart < Duration.zero) {
@@ -75,12 +72,6 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     scaleController = TimelineEditorScaleController();
     positionController = StreamController<double>.broadcast();
     progressTimer = Timer.periodic(Duration(milliseconds: 350), positionUpdate);
-    _controller =
-        AnimationController(vsync: this, duration: Duration(seconds: 2));
-    _animation = Tween(begin: 100.0, end: 200.0).animate(_controller)
-      ..addListener(() {
-        setState(() => _trackHeight = _animation.value);
-      });
     positionUpdate(null);
   }
 
@@ -116,7 +107,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                     builder: (context, snapshot) {
                       return Text('Current scale: ' + snapshot.data.toString());
                     }),
-                RaisedButton(
+                ElevatedButton(
                   child: const Text('Change track height'),
                   onPressed: () =>
                       _controller.status == AnimationStatus.forward ||
@@ -136,7 +127,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
                 child: TimelineEditor(
                   scaleController: scaleController,
                   minimumTimeWidgetExtent: customTimeString ? 100 : null,
-                  leadingWidgetBuilder: (index) => Center(child: RaisedButton(onPressed: (){},   child: Text("$index"))),
+                  leadingWidgetBuilder: (index) => Center(child: ElevatedButton(onPressed: (){},   child: Text("$index"))),
                   timelineLeadingWidget: Center(child: Text("HEADDER")),
                   timeWidgetBuilder: customTimeString
                       ? (d, t) => Padding(

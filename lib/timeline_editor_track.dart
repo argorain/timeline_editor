@@ -237,9 +237,6 @@ class TimelineEditorEmptyCard extends ITimelineEditorCard {
     double pixelsPerSeconds, {
     Duration availableSpace,
   }) {
-    bool accepted = false;
-
-
     return TimelineEditorSizedBox(
       duration: duration,
       pixelsPerSeconds: pixelsPerSeconds,
@@ -258,7 +255,6 @@ class TimelineEditorEmptyCard extends ITimelineEditorCard {
         }, 
         onAccept: (data) {
           print("On Accept");
-          accepted = true;
         },
         onAcceptWithDetails: (details) {
           print("["+trackId.toString()+"]On Accept with details:" + details.toString());
@@ -370,7 +366,7 @@ class _TimelineEditorTrackState extends State<TimelineEditorTrack> {
   }
 
   void setup() {
-    List<ITimelineEditorCard> targetBoxes = List<ITimelineEditorCard>();
+    List<ITimelineEditorCard> targetBoxes = List<ITimelineEditorCard>.empty(growable: true);
 
     if (widget.boxes != null && widget.boxes.length > 0) {
       var sortedStart = widget.boxes.toList();

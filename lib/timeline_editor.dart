@@ -1,11 +1,8 @@
-import 'dart:math';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:timeline_editor/timeline_editor_scale_controller.dart';
 import 'package:timeline_editor/timeline_editor_track.dart';
-
 import 'cahced_layout_builder.dart';
 import 'extensions.dart';
 export './timeline_editor_track.dart';
@@ -107,8 +104,6 @@ class _TimelineEditorState extends State<TimelineEditor> {
   double previousScale;
   double pps;
   double timeBlockSize;
-
-  Duration _timeUnderFocal;
   double scaleFocal;
 
   double get scaledPixelPerSeconds => (pps ?? 1) * scale;
@@ -185,9 +180,6 @@ class _TimelineEditorState extends State<TimelineEditor> {
 
   void _onScaleStart(double dx) {
     previousScale = scale;
-    _timeUnderFocal =
-        durationFromSeconds((dx + scrollController.offset) / pps / scale);
-    // (details.focalPoint.dx + scrollController.offset) / pps / scale);
   }
 
   void _onScaleUpdate(double details) {
@@ -199,7 +191,6 @@ class _TimelineEditorState extends State<TimelineEditor> {
 
   void _onScaleEnd(_) {
     previousScale = null;
-    _timeUnderFocal = null;
   }
 
   @override
